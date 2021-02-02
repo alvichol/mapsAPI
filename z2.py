@@ -10,15 +10,13 @@ class Example(QWidget):
         self.initUI()
 
     def initUI(self):
+        lon, lat, delta = input().split()
         self.setGeometry(100, 100, 800, 600)
         self.setWindowTitle('Первая программа')
         self.image = QLabel(self)
         self.image.move(0, 0)
         self.image.resize(800, 600)
         api_server = "http://static-maps.yandex.ru/1.x/"
-        lon = "37.530887"
-        lat = "55.703118"
-        delta = "0.002"
         params = {
             "ll": ",".join([lon, lat]),
             "spn": ",".join([delta, delta]),
