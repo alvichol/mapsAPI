@@ -1,13 +1,26 @@
 import sys
+import PyQt5
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel
 from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import Qt
 import requests
 
 
 class Example(QWidget):
     def __init__(self):
         super().__init__()
+        self.delta = '0.002'
         self.initUI()
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Up:
+            self.delta = float(self.delta) - float(self.delta) / 2
+            self.delta = str(self.delta)
+            self.imageUp()
+        if event.key() == Qt.Key_Down:
+            self.delta = float(self.delta) + float(self.delta) / 2
+            self.delta = str(self.delta)
+            self.imageUp()
 
     def initUI(self):
         self.setGeometry(100, 100, 800, 600)
@@ -15,13 +28,15 @@ class Example(QWidget):
         self.image = QLabel(self)
         self.image.move(0, 0)
         self.image.resize(800, 600)
+        self.imageUp()
+
+    def imageUp(self):
         api_server = "http://static-maps.yandex.ru/1.x/"
         lon = "37.530887"
         lat = "55.703118"
-        delta = "0.002"
         params = {
             "ll": ",".join([lon, lat]),
-            "spn": ",".join([delta, delta]),
+            "spn": ",".join([self.delta, self.delta]),
             "l": "map"
         }
         response = requests.get(api_server, params=params)
